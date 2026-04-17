@@ -1,4 +1,4 @@
-# ⬡ NEXUS Tech Store
+# NEXUS Tech Store
 ### Proyecto Final — Comercio Electrónico | Tecnología Web
 
 <div align="center">
@@ -13,7 +13,7 @@
 
 ---
 
-## 🔗 Sitio Desplegado
+## Sitio Desplegado
 
 > **URL Pública:** [https://proyecto-economia-equipo3.netlify.app/](https://proyecto-economia-equipo3.netlify.app/)
 >
@@ -30,7 +30,7 @@ El diseño sigue una estética **cyberpunk / dark-tech** con tipografías futuri
 ---
 
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 | Tecnología | Versión | Uso en el proyecto |
 |---|---|---|
@@ -136,7 +136,7 @@ nexus-tech-store/
 
 ---
 
-## 💾 Datos Guardados en LocalStorage
+## Datos Guardados en LocalStorage
 
 | Clave | Tipo | Contenido |
 |---|---|---|
