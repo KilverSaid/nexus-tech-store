@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEXUS Tech Store — Tu tienda de tecnología premium. Laptops, monitores, periféricos y componentes de última generación. Envío a toda Honduras.">
+  <meta name="keywords" content="laptops gaming, monitor 4K, teclado mecánico, SSD NVMe, GPU RTX, tienda tecnología Honduras">
+  <meta name="author" content="NEXUS Tech Store">
+  <meta property="og:title" content="NEXUS Tech Store — Tecnología de Otra Dimensión">
+  <meta property="og:description" content="Las mejores laptops, monitores, periféricos y componentes al mejor precio.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#00f5ff">
+  <title>NEXUS Tech Store — Tecnología de Otra Dimensión</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- SEO Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "NEXUS Tech Store",
+    "description": "Tienda de tecnología premium con laptops, monitores, periféricos y componentes.",
+    "url": "https://nexus-tech-store.netlify.app",
+    "telephone": "+504-9999-0000",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "La Paz",
+      "addressCountry": "HN"
+    },
+    "priceRange": "$$"
+  }
+  </script>
+</head>
+<body>
+
+<!-- Scanlines overlay -->
+<div class="scanlines"></div>
+
+<!-- ========== PROMO BAR ========== -->
+<div id="promo-bar">
+  ENVÍO GRATIS en pedidos +$299 &nbsp;|&nbsp;  Pago 100% Seguro &nbsp;|&nbsp;  30 días de devolución &nbsp;|&nbsp;  Soporte 24/7
+</div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar navbar-expand-lg sticky-top" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      ⬡ NEXUS<span class="brand-accent">.</span>TECH
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto ms-4 gap-1">
+        <li class="nav-item"><a class="nav-link" href="#hero">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="#catalogSection">Catálogo</a></li>
+        <li class="nav-item"><a class="nav-link" href="#featuresSection">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" href="#policiesSection">Políticas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contactSection">Contacto</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-3">
+        <!-- Search -->
+        <div class="position-relative d-none d-lg-block">
+          <input type="text" id="navSearch" class="form-control" placeholder="Buscar productos..." 
+            style="background:var(--dark3);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:0.8rem;padding:7px 14px;width:200px;"
+            oninput="document.getElementById('searchInput').value=this.value; searchQuery=this.value; renderProducts(); document.getElementById('catalogSection').scrollIntoView({behavior:'smooth'})">
+        </div>
+        <!-- Cart button -->
+        <button class="btn-neon position-relative d-flex align-items-center gap-2" id="cartBtn"
+          data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
+          style="padding:8px 16px; font-size:0.75rem;">
+          <i class="bi bi-bag-fill" style="font-size:1rem;"></i>
+          <span class="d-none d-sm-inline">CARRITO</span>
+          <span class="badge rounded-pill" id="cartCount" style="display:none; background:var(--magenta); font-family:'Share Tech Mono',monospace; font-size:0.65rem; position:absolute; top:-8px; right:-8px; width:20px; height:20px; display:none; align-items:center; justify-content:center;">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== CART OFFCANVAS ========== -->
+<div class="offcanvas offcanvas-end" id="cartOffcanvas" tabindex="-1">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">🛒 Mi Carrito</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column" style="padding:1rem;">
+
+    <!-- Empty state -->
+    <div id="cartEmpty" class="cart-empty" style="display:none;">
+      <div class="cart-empty-icon">🛒</div>
+      <p>Tu carrito está vacío</p>
+      <button class="btn-neon mt-2" data-bs-dismiss="offcanvas" onclick="document.getElementById('catalogSection').scrollIntoView({behavior:'smooth'})">
+        Explorar Productos
+      </button>
+    </div>
+
+    <!-- Cart Items -->
+    <div id="cartItems" style="flex:1; overflow-y:auto;"></div>
+
+    <!-- Cart Footer -->
+    <div id="cartFooter" style="display:none;">
+      <!-- Shipping selector -->
+      <div style="margin-bottom:0.75rem;">
+        <label style="font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:0.5rem;">Envío</label>
+        <select class="form-select" style="font-size:0.85rem;" onchange="selectedShipping=this.value; updateCartUI();">
+          <option value="standard">Estándar (5-7 días) — $9.99</option>
+          <option value="express">Express (1-2 días) — $24.99</option>
+          <option value="overnight">Nocturno — $49.99</option>
+        </select>
+      </div>
+
+      <div class="cart-summary mb-3">
+        <div class="cart-summary-row">
+          <span class="label">Subtotal</span><span class="value" id="cartSubtotal">$0.00</span>
+        </div>
+        <div class="cart-summary-row">
+          <span class="label">Envío</span><span class="value" id="cartShipping">$0.00</span>
+        </div>
+        <div class="cart-summary-row">
+          <span class="label">ISV (15%)</span><span class="value" id="cartTax">$0.00</span>
+        </div>
+        <div class="cart-summary-row total">
+          <span class="label">TOTAL</span><span class="value" id="cartTotal">$0.00</span>
+        </div>
+      </div>
+      <button class="btn-solid-cyan w-100" onclick="goToCheckout()">
+        PROCEDER AL CHECKOUT →
+      </button>
+      <button class="btn-neon-magenta btn-neon w-100 mt-2" onclick="clearCart(); showToast('Carrito vaciado','info')" style="font-size:0.72rem; padding:8px;">
+        Vaciar Carrito
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PRODUCT DETAIL MODAL ========== -->
+<div class="modal fade" id="productModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductTitle">Detalle del Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalBody" style="padding:1.5rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================
+     MAIN CONTENT
+     ==================================================== -->
+<main>
+
+  <!-- ===== SHOP SECTION ===== -->
+  <div id="shopSection">
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-glow2"></div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center min-vh-100 py-5">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="mb-3">
+              <span class="section-tag">// NUEVA GENERACIÓN</span>
+            </div>
+            <h1 class="hero-title glitch" data-text="TECNOLOGÍA DE OTRA DIMENSIÓN">
+              TECNOLOGÍA<br>
+              <span class="neon-cyan">DE OTRA</span><br>
+              DIMENSIÓN
+            </h1>
+            <p class="hero-subtitle mb-4">
+              Las mejores laptops, monitores, periféricos y componentes.<br>
+              Rendimiento extremo. Precios brutales.
+            </p>
+            <div class="d-flex flex-wrap gap-3 mb-4">
+              <button class="btn-solid-cyan" id="heroShopBtn">
+                EXPLORAR CATÁLOGO →
+              </button>
+              <button class="btn-neon" onclick="document.getElementById('featuresSection').scrollIntoView({behavior:'smooth'})">
+                ¿POR QUÉ NEXUS?
+              </button>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="num count-up" data-target="500" data-suffix="+">0+</span>
+                <span class="label">Productos</span>
+              </div>
+              <div class="hero-stat">
+                <span class="num count-up" data-target="12000" data-suffix="+">0+</span>
+                <span class="label">Clientes</span>
+              </div>
+              <div class="hero-stat">
+                <span class="num count-up" data-target="99" data-suffix="%">0%</span>
+                <span class="label">Satisfacción</span>
+              </div>
+              <div class="hero-stat">
+                <span class="num count-up" data-target="5" data-suffix=" años">0 años</span>
+                <span class="label">Experiencia</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hero-product-showcase">
+              <div class="hero-product-frame position-relative">
+                <span class="hero-badge">BESTSELLER</span>
+                <div class="text-center p-2">
+                  <img src="https://sm.pcmag.com/pcmag_me/review/a/asus-rog-z/asus-rog-zephyrus-g14-2024_qw12.jpg" 
+                    alt="ASUS ROG Zephyrus" 
+                    class="img-fluid" style="max-height:300px; object-fit:contain;"
+                    onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300f5ff%22 font-size=%2280%22 x=%22200%22 y=%22165%22 text-anchor=%22middle%22>💻</text></svg>'">
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3 px-2 pb-2">
+                  <div>
+                    <div style="font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--text-muted);">ASUS ROG ZEPHYRUS G14</div>
+                    <div style="font-family:'Orbitron',sans-serif; font-size:0.85rem; color:var(--white);">Gaming Laptop 2024</div>
+                  </div>
+                  <div>
+                    <div style="text-decoration:line-through; font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:var(--text-muted);">$1,799.99</div>
+                    <div class="neon-cyan" style="font-family:'Share Tech Mono',monospace; font-size:1.2rem;">$1,499.99</div>
+                  </div>
+                </div>
+                <button class="btn-solid-cyan w-100 mt-2" onclick="addToCart(1)">
+                  + AÑADIR AL CARRITO
+                </button>
+              </div>
+              <!-- Floating badges -->
+              <div style="position:absolute; top:-20px; left:-20px; background:var(--dark2); border:1px solid var(--border); padding:10px 15px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+                <div style="font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--text-muted);">RTX 4060</div>
+                <div style="font-family:'Orbitron',sans-serif; font-size:0.85rem; color:var(--cyan);">8GB VRAM</div>
+              </div>
+              <div style="position:absolute; bottom:-20px; right:-20px; background:var(--dark2); border:1px solid var(--magenta); padding:10px 15px; box-shadow:0 0 20px rgba(255,0,110,0.2);">
+                <div style="font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--text-muted);">AHORRA</div>
+                <div style="font-family:'Orbitron',sans-serif; font-size:1rem; color:var(--magenta);">-17%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="featuresSection" class="page-section section-bg-alt">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag">// ¿POR QUÉ NEXUS?</span>
+          <h2 class="section-title">Ventajas que nos diferencian</h2>
+          <div class="section-divider mx-auto"></div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">Envío Ultra-Rápido</div>
+              <p class="feature-desc">Entrega en 24-48h para pedidos express. Envío estándar en 5-7 días. Gratis en compras +$299.</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">Pago 100% Seguro</div>
+              <p class="feature-desc">Cifrado SSL/TLS en todas las transacciones. Aceptamos tarjetas, PayPal, transferencia y crypto.</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">30 Días Garantía</div>
+              <p class="feature-desc">No te convence, te devolvemos el dinero. Proceso de devolución simple y sin complicaciones.</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">Soporte 24/7</div>
+              <p class="feature-desc">Equipo especializado disponible todo el día. Chat, email y WhatsApp para asistencia inmediata.</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">Garantía Oficial</div>
+              <p class="feature-desc">Todos los productos con garantía oficial del fabricante. Servicio técnico autorizado en Honduras.</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="feature-card">
+              <div class="feature-icon"></div>
+              <div class="feature-title">MSI sin intereses</div>
+              <p class="feature-desc">Divide tus compras en hasta 12 meses sin intereses con tarjetas participantes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATALOG SECTION -->
+    <section id="catalogSection" class="page-section section-bg">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag">// CATÁLOGO COMPLETO</span>
+          <h2 class="section-title">Explora nuestros Productos</h2>
+          <div class="section-divider mx-auto"></div>
+        </div>
+
+        <!-- Categories -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card active" data-cat="all">
+              <span class="category-icon"></span>
+              <div class="category-name">Todo</div>
+              <div class="category-count">15 items</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card" data-cat="laptops">
+              <span class="category-icon"></span>
+              <div class="category-name">Laptops</div>
+              <div class="category-count">3 items</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card" data-cat="monitors">
+              <span class="category-icon"></span>
+              <div class="category-name">Monitores</div>
+              <div class="category-count">2 items</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card" data-cat="peripherals">
+              <span class="category-icon"></span>
+              <div class="category-name">Periféricos</div>
+              <div class="category-count">4 items</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card" data-cat="storage">
+              <span class="category-icon"></span>
+              <div class="category-name">Storage</div>
+              <div class="category-count">2 items</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-md-2">
+            <div class="category-card" data-cat="components">
+              <span class="category-icon"></span>
+              <div class="category-name">GPU</div>
+              <div class="category-count">2 items</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar d-flex flex-wrap align-items-center gap-3 mb-4">
+          <div class="flex-grow-1">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍  Buscar producto, marca, especificaciones...">
+          </div>
+          <div>
+            <select id="sortSelect" class="form-select" style="min-width:200px;">
+              <option value="featured">Destacados</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+              <option value="rating">Mejor Valorados</option>
+              <option value="name">Nombre A-Z</option>
+              <option value="sale">Ofertas Primero</option>
+            </select>
+          </div>
+          <div>
+            <span id="productsCount" style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--text-muted);">15 productos</span>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row" id="productsGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDIO CATEGORY BANNER -->
+    <section class="page-section-sm section-bg-alt">
+      <div class="container">
+        <div class="row align-items-center g-4" style="background:var(--card); border:1px solid var(--border); padding:2rem; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background: radial-gradient(ellipse at right, rgba(255,0,110,0.06) 0%, transparent 60%);"></div>
+          <div class="col-md-7">
+            <span class="section-tag">// NUEVA CATEGORÍA</span>
+            <h3 style="font-family:'Orbitron',sans-serif; font-size:1.5rem; color:var(--white); margin-bottom:0.5rem;">Audio Premium</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">
+              Sony WH-1000XM5, AirPods Pro 2 y los mejores auriculares gaming. Sonido que te aísla del mundo.
+            </p>
+            <button class="btn-neon-magenta btn-neon" onclick="currentFilter='audio'; renderProducts(); document.getElementById('catalogSection').scrollIntoView({behavior:'smooth'})">
+              VER AUDIO →
+            </button>
+          </div>
+          <div class="col-md-5 text-center">
+            <div style="font-size:6rem; line-height:1;">🎧</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section id="newsletter-section" class="page-section-sm" style="padding:60px 0;">
+      <div class="newsletter-bg"></div>
+      <div class="container position-relative">
+        <div class="row justify-content-center">
+          <div class="col-lg-7 text-center">
+            <span class="section-tag">// MANTENTE CONECTADO</span>
+            <h3 class="section-title" style="font-size:1.8rem;">Recibe ofertas exclusivas</h3>
+            <p style="color:var(--text-muted); margin-bottom:2rem; font-size:0.95rem;">
+              Suscríbete y sé el primero en saber sobre lanzamientos, descuentos y bundles especiales.
+              Sin spam. Sin excusas.
+            </p>
+            <form onsubmit="subscribeNewsletter(event)" class="d-flex flex-column flex-sm-row gap-0">
+              <input type="email" id="newsletterEmail" class="newsletter-input form-control flex-grow-1" placeholder="tu@email.com" required>
+              <button type="submit" class="btn-solid-cyan" style="border-radius:0; white-space:nowrap; padding:12px 24px;">
+                SUSCRIBIRME →
+              </button>
+            </form>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-top:1rem; font-family:'Share Tech Mono',monospace;">
+              Al suscribirte, aceptas nuestra política de privacidad. Puedes darte de baja cuando quieras.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POLICIES SECTION -->
+    <section id="policiesSection" class="page-section section-bg-alt">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag">// INFORMACIÓN LEGAL</span>
+          <h2 class="section-title">Políticas y Términos</h2>
+          <div class="section-divider mx-auto"></div>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <!-- Shipping Policy -->
+          <div class="col-md-4">
+            <div class="policy-card">
+              <h5> Política de Envíos</h5>
+              <ul>
+                <li>Envío estándar: 5-7 días hábiles — $9.99</li>
+                <li>Envío express: 1-2 días hábiles — $24.99</li>
+                <li>Entrega nocturna: día siguiente — $49.99</li>
+                <li>Envío GRATIS en pedidos mayores a $299</li>
+                <li>Cobertura: toda Honduras y centroamérica</li>
+                <li>Seguimiento en tiempo real con número de guía</li>
+                <li>Embalaje seguro y sellado de fábrica</li>
+                <li>Seguro de envío incluido en todos los pedidos</li>
+              </ul>
+            </div>
+          </div>
+          <!-- Returns Policy -->
+          <div class="col-md-4">
+            <div class="policy-card">
+              <h5>↩ Política de Devoluciones</h5>
+              <ul>
+                <li>30 días para devoluciones sin preguntas</li>
+                <li>Producto debe estar sin uso y en empaque original</li>
+                <li>Reembolso completo en 3-5 días hábiles</li>
+                <li>Defectos de fábrica cubiertos por garantía</li>
+                <li>Proceso iniciado por email o WhatsApp</li>
+                <li>Daños por uso inadecuado no aplican</li>
+                <li>Garantía oficial del fabricante activa</li>
+                <li>Soporte técnico antes de devolución si aplica</li>
+              </ul>
+            </div>
+          </div>
+          <!-- Terms & Privacy -->
+          <div class="col-md-4">
+            <div class="policy-card">
+              <h5> Términos y Privacidad</h5>
+              <ul>
+                <li>Datos personales usados solo para el pedido</li>
+                <li>No compartimos información con terceros</li>
+                <li>Cifrado SSL en todas las transacciones</li>
+                <li>Cookies de análisis y mejora del servicio</li>
+                <li>Precios en USD, pago en Lempiras al tipo de cambio</li>
+                <li>Imágenes de productos son referenciales</li>
+                <li>Disponibilidad de stock en tiempo real</li>
+                <li>Derecho a modificar precios sin previo aviso</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Terms expandable -->
+        <div style="background:var(--card); border:1px solid var(--border); padding:1.5rem;">
+          <button class="btn-neon w-100 text-start d-flex justify-content-between align-items-center"
+            data-bs-toggle="collapse" data-bs-target="#fullTerms" style="padding:12px 16px;">
+            <span> Ver Términos y Condiciones Completos</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <div class="collapse" id="fullTerms" style="margin-top:1rem;">
+            <div style="font-size:0.88rem; color:var(--text-muted); line-height:1.8;">
+              <p><strong style="color:var(--cyan);">1. ACEPTACIÓN DE TÉRMINOS</strong><br>
+              Al acceder y utilizar NEXUS Tech Store, usted acepta cumplir y estar sujeto a estos Términos de Servicio. Si no está de acuerdo con alguno de estos términos, no utilice nuestro sitio.</p>
+              <p><strong style="color:var(--cyan);">2. USO DEL SITIO</strong><br>
+              Este sitio web es para uso personal y comercial legítimo. Se prohíbe el uso del sitio para actividades ilegales, fraudulentas o que violen derechos de terceros. NEXUS se reserva el derecho de suspender cuentas que violen estas condiciones.</p>
+              <p><strong style="color:var(--cyan);">3. PRECIOS Y DISPONIBILIDAD</strong><br>
+              Los precios están expresados en dólares americanos (USD) y están sujetos a cambio sin previo aviso. La disponibilidad de productos es informativa y puede variar. En caso de error en el precio, NEXUS se reserva el derecho de cancelar el pedido.</p>
+              <p><strong style="color:var(--cyan);">4. AVISO DE PRIVACIDAD</strong><br>
+              Recopilamos información personal necesaria para procesar pedidos: nombre, dirección, correo electrónico y datos de pago. Esta información se trata de forma confidencial y no se comparte con terceros salvo requerimiento legal o procesadores de pago autorizados. Puede ejercer sus derechos de acceso, rectificación y cancelación contactándonos.</p>
+              <p><strong style="color:var(--cyan);">5. LIMITACIÓN DE RESPONSABILIDAD</strong><br>
+              NEXUS Tech Store no será responsable por daños indirectos, incidentales o consecuentes derivados del uso de nuestros productos o servicios más allá del monto pagado por el producto en cuestión.</p>
+              <p style="color:var(--text-muted); font-size:0.8rem;">Última actualización: Enero 2025. Honduras, C.A.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contactSection" class="page-section section-bg">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag">// CONTACTO</span>
+          <h2 class="section-title">Estamos aquí para ayudarte</h2>
+          <div class="section-divider mx-auto"></div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-5">
+            <div class="policy-card h-100">
+              <h5> Información de Contacto</h5>
+              <div style="font-size:0.9rem; line-height:2.5;">
+                <div> <a href="mailto:soporte@nexustech.hn" style="color:var(--cyan); text-decoration:none;">soporte@nexustech.hn</a></div>
+                <div> <span style="color:var(--white);">+504 9999-0000</span></div>
+                <div> <a href="https://wa.me/50499990000" style="color:var(--cyan); text-decoration:none;">WhatsApp Business</a></div>
+                <div> <span style="color:var(--white);">La Paz, Honduras</span></div>
+                <div> <span style="color:var(--white);">Lun-Vie 8am-6pm | Sab 9am-2pm</span></div>
+              </div>
+              <hr style="border-color:var(--border); margin:1.5rem 0;">
+              <h5> Síguenos</h5>
+              <div class="d-flex gap-2 mt-3">
+                <a href="#" class="social-btn" title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="social-btn" title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="social-btn" title="Twitter/X"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="social-btn" title="YouTube"><i class="bi bi-youtube"></i></a>
+                <a href="#" class="social-btn" title="TikTok"><i class="bi bi-tiktok"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="contact-form-wrap">
+              <h5 style="font-family:'Orbitron',sans-serif; font-size:0.9rem; color:var(--white); margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">Envíanos un mensaje</h5>
+              <form onsubmit="submitContact(event)">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="contactName" placeholder="Tu nombre" required>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="tu@email.com" required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Asunto</label>
+                    <select class="form-select">
+                      <option>Consulta sobre producto</option>
+                      <option>Soporte técnico</option>
+                      <option>Estado de pedido</option>
+                      <option>Devolución / Garantía</option>
+                      <option>Otro</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="contactMessage" rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn-solid-cyan w-100">ENVIAR MENSAJE →</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /shopSection -->
+
+  <!-- ===== CHECKOUT SECTION ===== -->
+  <div id="checkoutSection" style="display:none;">
+    <section class="page-section">
+      <div class="container">
+        <!-- Back button -->
+        <button class="btn-neon mb-4" onclick="continueShopping()" style="font-size:0.75rem; padding:8px 16px;">
+          ← Seguir comprando
+        </button>
+
+        <div class="text-center mb-4">
+          <span class="section-tag">// PROCESO DE COMPRA</span>
+          <h2 class="section-title">Checkout Seguro</h2>
+        </div>
+
+        <!-- Steps -->
+        <div class="checkout-steps mb-5">
+          <div class="step" data-step="1">
+            <div class="step-circle">01</div>
+            <div class="step-label">Mis Datos</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-circle">02</div>
+            <div class="step-label">Pago</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-circle">03</div>
+            <div class="step-label">Confirmación</div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Main Content -->
+          <div class="col-lg-8">
+
+            <!-- STEP 1: Customer Info -->
+            <div id="panelCustomer">
+              <div class="checkout-card">
+                <h5> Datos del cliente y envío</h5>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label">Nombre *</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Juan">
+                    <div class="invalid-feedback">Ingresa tu nombre (mín. 2 caracteres)</div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Apellido *</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Pérez">
+                    <div class="invalid-feedback">Ingresa tu apellido (mín. 2 caracteres)</div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" placeholder="juan@email.com">
+                    <div class="invalid-feedback">Ingresa un email válido</div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Teléfono *</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="+504 9999-0000">
+                    <div class="invalid-feedback">Ingresa tu número de teléfono</div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Dirección *</label>
+                    <input type="text" class="form-control" id="address" placeholder="Col. Kennedy, calle principal #123">
+                    <div class="invalid-feedback">Ingresa tu dirección completa</div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label">Ciudad *</label>
+                    <input type="text" class="form-control" id="city" placeholder="Tegucigalpa">
+                    <div class="invalid-feedback">Ingresa tu ciudad</div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label">Departamento</label>
+                    <select class="form-select" id="state">
+                      <option>La Paz</option>
+                      <option>Francisco Morazán</option>
+                      <option>Cortés</option>
+                      <option>Atlántida</option>
+                      <option>Comayagua</option>
+                      <option>Choluteca</option>
+                      <option>El Paraíso</option>
+                      <option>Olancho</option>
+                      <option>Otro</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label">Código Postal *</label>
+                    <input type="text" class="form-control" id="postalCode" placeholder="11101">
+                    <div class="invalid-feedback">Ingresa tu código postal</div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">País</label>
+                    <select class="form-select" id="country">
+                      <option>Honduras</option>
+                      <option>Guatemala</option>
+                      <option>El Salvador</option>
+                      <option>Nicaragua</option>
+                      <option>Costa Rica</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Notas del pedido (opcional)</label>
+                    <textarea class="form-control" id="orderNotes" rows="2" placeholder="Instrucciones especiales de entrega..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shipping options in checkout -->
+              <div class="checkout-card mt-3">
+                <h5> Método de Envío</h5>
+                <div class="row g-2">
+                  <div class="col-12">
+                    <label style="display:flex; align-items:center; gap:12px; background:var(--dark3); border:1px solid var(--border); padding:12px 16px; cursor:pointer; transition:all 0.2s;" 
+                      onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
+                      <input type="radio" name="shipping" value="standard" checked style="accent-color:var(--cyan);">
+                      <div style="flex:1;">
+                        <div style="font-family:'Orbitron',sans-serif; font-size:0.82rem; color:var(--white);">Envío Estándar</div>
+                        <div style="font-size:0.78rem; color:var(--text-muted);">5-7 días hábiles</div>
+                      </div>
+                      <span style="font-family:'Share Tech Mono',monospace; color:var(--cyan);">$9.99</span>
+                    </label>
+                  </div>
+                  <div class="col-12">
+                    <label style="display:flex; align-items:center; gap:12px; background:var(--dark3); border:1px solid var(--border); padding:12px 16px; cursor:pointer; transition:all 0.2s;"
+                      onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
+                      <input type="radio" name="shipping" value="express" style="accent-color:var(--cyan);">
+                      <div style="flex:1;">
+                        <div style="font-family:'Orbitron',sans-serif; font-size:0.82rem; color:var(--white);">Envío Express</div>
+                        <div style="font-size:0.78rem; color:var(--text-muted);">1-2 días hábiles</div>
+                      </div>
+                      <span style="font-family:'Share Tech Mono',monospace; color:var(--yellow);">$24.99</span>
+                    </label>
+                  </div>
+                  <div class="col-12">
+                    <label style="display:flex; align-items:center; gap:12px; background:var(--dark3); border:1px solid var(--border); padding:12px 16px; cursor:pointer; transition:all 0.2s;"
+                      onmouseover="this.style.borderColor='var(--magenta)'" onmouseout="this.style.borderColor='var(--border)'">
+                      <input type="radio" name="shipping" value="overnight" style="accent-color:var(--cyan);">
+                      <div style="flex:1;">
+                        <div style="font-family:'Orbitron',sans-serif; font-size:0.82rem; color:var(--white);">Entrega Nocturna</div>
+                        <div style="font-size:0.78rem; color:var(--text-muted);">Día siguiente antes de las 9am</div>
+                      </div>
+                      <span style="font-family:'Share Tech Mono',monospace; color:var(--magenta);">$49.99</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end mt-3">
+                <button class="btn-solid-cyan" onclick="nextStep()">CONTINUAR AL PAGO →</button>
+              </div>
+            </div>
+
+            <!-- STEP 2: Payment -->
+            <div id="panelPayment" style="display:none;">
+              <div class="checkout-card">
+                <h5> Método de Pago</h5>
+                <div class="payment-option selected" data-payment="card" onclick="document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); selectedPayment='card'; document.getElementById('cardForm').style.display='block';">
+                  <input type="radio" class="payment-radio" name="payMethod" value="card" checked>
+                  <span class="payment-icon"></span>
+                  <div>
+                    <div class="payment-label">Tarjeta de Crédito / Débito</div>
+                    <div class="payment-desc">Visa, Mastercard, American Express</div>
+                  </div>
+                </div>
+                <div class="payment-option" data-payment="paypal" onclick="document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); selectedPayment='paypal'; document.getElementById('cardForm').style.display='none';">
+                  <input type="radio" class="payment-radio" name="payMethod" value="paypal">
+                  <span class="payment-icon"></span>
+                  <div>
+                    <div class="payment-label">PayPal</div>
+                    <div class="payment-desc">Paga con tu cuenta PayPal de forma segura</div>
+                  </div>
+                </div>
+                <div class="payment-option" data-payment="transfer" onclick="document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); selectedPayment='transfer'; document.getElementById('cardForm').style.display='none';">
+                  <input type="radio" class="payment-radio" name="payMethod" value="transfer">
+                  <span class="payment-icon"></span>
+                  <div>
+                    <div class="payment-label">Transferencia Bancaria</div>
+                    <div class="payment-desc">BAC | Atlántida | Ficohsa | BHN</div>
+                  </div>
+                </div>
+                <div class="payment-option" data-payment="crypto" onclick="document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); selectedPayment='crypto'; document.getElementById('cardForm').style.display='none';">
+                  <input type="radio" class="payment-radio" name="payMethod" value="crypto">
+                  <span class="payment-icon">₿</span>
+                  <div>
+                    <div class="payment-label">Criptomoneda</div>
+                    <div class="payment-desc">Bitcoin, Ethereum, USDT</div>
+                  </div>
+                </div>
+
+                <!-- Card Form -->
+                <div id="cardForm" style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <label class="form-label">Número de Tarjeta *</label>
+                      <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                      <div class="invalid-feedback">Número de tarjeta inválido (16 dígitos)</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Nombre en la Tarjeta *</label>
+                      <input type="text" class="form-control" id="cardName" placeholder="JUAN PEREZ">
+                      <div class="invalid-feedback">Ingresa el nombre tal como aparece en la tarjeta</div>
+                    </div>
+                    <div class="col-sm-6">
+                      <label class="form-label">Fecha de Vencimiento *</label>
+                      <input type="text" class="form-control" id="cardExpiry" placeholder="MM/AA" maxlength="5">
+                      <div class="invalid-feedback">Formato: MM/AA</div>
+                    </div>
+                    <div class="col-sm-6">
+                      <label class="form-label">CVV *</label>
+                      <input type="text" class="form-control" id="cardCVV" placeholder="123" maxlength="4">
+                      <div class="invalid-feedback">CVV de 3-4 dígitos</div>
+                    </div>
+                  </div>
+                  <div class="mt-3 p-3" style="background:rgba(0,245,255,0.03); border:1px solid rgba(0,245,255,0.1);">
+                    <small style="font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">
+                       MODO PRUEBA — No ingreses datos reales. Usa: 4242 4242 4242 4242 | Exp: 12/26 | CVV: 123
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                <button class="btn-neon" onclick="prevStep()">← REGRESAR</button>
+                <button class="btn-solid-cyan" onclick="nextStep()">REVISAR PEDIDO →</button>
+              </div>
+            </div>
+
+            <!-- STEP 3: Review & Place Order -->
+            <div id="panelReview" style="display:none;">
+              <div class="checkout-card">
+                <h5> Revisión del Pedido</h5>
+                <div id="reviewContent"></div>
+              </div>
+
+              <div class="checkout-card mt-3" style="background:rgba(0,245,255,0.02); border-color:rgba(0,245,255,0.2);">
+                <div class="d-flex gap-3 align-items-start">
+                  <span style="font-size:1.5rem; flex-shrink:0;"></span>
+                  <div>
+                    <p style="font-family:'Orbitron',sans-serif; font-size:0.82rem; color:var(--white); margin-bottom:0.25rem;">Compra 100% Segura</p>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">
+                      Tus datos están protegidos con cifrado SSL/TLS de grado bancario. Al confirmar, aceptas nuestros 
+                      <a href="#policiesSection" style="color:var(--cyan);">Términos y Condiciones</a> y 
+                      <a href="#policiesSection" style="color:var(--cyan);">Política de Privacidad</a>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                <button class="btn-neon" onclick="prevStep()">← REGRESAR</button>
+                <button class="btn-solid-cyan" id="placeOrderBtn" onclick="placeOrder()">
+                   CONFIRMAR Y PAGAR →
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Order Summary Sidebar -->
+          <div class="col-lg-4">
+            <div class="order-summary-card">
+              <h5>Resumen del Pedido</h5>
+              <div id="summaryItems"></div>
+              <hr class="summary-divider">
+              <div class="summary-row">
+                <span class="lbl" style="color:var(--text-muted);">Subtotal</span>
+                <span class="val" id="summarySubtotal" style="font-family:'Share Tech Mono',monospace;">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl" style="color:var(--text-muted);">Envío</span>
+                <span class="val" id="summaryShipping" style="font-family:'Share Tech Mono',monospace;">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl" style="color:var(--text-muted);">ISV (15%)</span>
+                <span class="val" id="summaryTax" style="font-family:'Share Tech Mono',monospace;">$0.00</span>
+              </div>
+              <div class="summary-row total-row">
+                <span class="lbl">TOTAL</span>
+                <span class="val" id="summaryTotal">$0.00</span>
+              </div>
+              <div class="mt-3 text-center">
+                <small style="font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--text-muted);">
+                   SSL SECURE CHECKOUT<br>
+                  Visa · Mastercard · PayPal · Crypto
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /checkoutSection -->
+
+  <!-- ===== CONFIRMATION SECTION ===== -->
+  <div id="confirmationSection" style="display:none;">
+    <section class="page-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-7">
+            <div class="confirm-card">
+              <div class="confirm-icon">✓</div>
+              <h2 style="font-family:'Orbitron',sans-serif; color:var(--white); font-size:1.5rem; margin-bottom:0.5rem;">
+                ¡Pedido Confirmado!
+              </h2>
+              <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">
+                Tu pedido ha sido procesado exitosamente.
+              </p>
+              <div class="confirm-order-id" id="confirmOrderId">NX-XXXXXX</div>
+              <p style="color:var(--text-muted); font-size:0.9rem; margin:1rem 0 0.5rem;">
+                Recibirás una confirmación en: <strong id="confirmEmail" style="color:var(--cyan);">tu@email.com</strong>
+              </p>
+              <p style="font-size:0.9rem; margin-bottom:1.5rem;">
+                Total cobrado: <span id="confirmTotal" style="font-family:'Share Tech Mono',monospace; font-size:1.2rem; color:var(--cyan);">$0.00</span>
+              </p>
+
+              <div style="background:var(--dark3); border:1px solid var(--border); padding:1.25rem; text-align:left; margin-bottom:1.5rem;">
+                <p style="font-family:'Orbitron',sans-serif; font-size:0.82rem; color:var(--white); margin-bottom:0.75rem;">📦 ¿Qué sigue?</p>
+                <div style="font-size:0.88rem; color:var(--text-muted); line-height:2;">
+                  <div>✓ Revisaremos tu pedido en las próximas 2 horas</div>
+                  <div>✓ Te enviaremos número de guía por email</div>
+                  <div>✓ Seguimiento en tiempo real disponible</div>
+                  <div>✓ Entrega estimada según método de envío elegido</div>
+                </div>
+              </div>
+
+              <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <button class="btn-solid-cyan" onclick="continueShopping()">
+                  SEGUIR COMPRANDO
+                </button>
+                <button class="btn-neon" onclick="window.print()">
+                   IMPRIMIR RECIBO
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="footer-brand">⬡ NEXUS<span class="accent">.</span>TECH</div>
+        <p class="footer-desc">
+          Tu tienda de tecnología premium en Honduras. Las mejores marcas, los mejores precios, 
+          la mejor experiencia de compra online.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-youtube"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <h6 class="footer-heading">Tienda</h6>
+        <ul class="footer-links">
+          <li><a href="#catalogSection" onclick="currentFilter='laptops';renderProducts()">Laptops</a></li>
+          <li><a href="#catalogSection" onclick="currentFilter='monitors';renderProducts()">Monitores</a></li>
+          <li><a href="#catalogSection" onclick="currentFilter='peripherals';renderProducts()">Periféricos</a></li>
+          <li><a href="#catalogSection" onclick="currentFilter='components';renderProducts()">GPU / Componentes</a></li>
+          <li><a href="#catalogSection" onclick="currentFilter='storage';renderProducts()">Almacenamiento</a></li>
+          <li><a href="#catalogSection" onclick="currentFilter='audio';renderProducts()">Audio</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <h6 class="footer-heading">Información</h6>
+        <ul class="footer-links">
+          <li><a href="#featuresSection">Sobre Nosotros</a></li>
+          <li><a href="#policiesSection">Política de Envíos</a></li>
+          <li><a href="#policiesSection">Devoluciones</a></li>
+          <li><a href="#policiesSection">Términos y Condiciones</a></li>
+          <li><a href="#policiesSection">Aviso de Privacidad</a></li>
+          <li><a href="#contactSection">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h6 class="footer-heading">Métodos de Pago</h6>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span style="background:var(--card); border:1px solid var(--border); padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">💳 VISA</span>
+          <span style="background:var(--card); border:1px solid var(--border); padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">💳 MASTERCARD</span>
+          <span style="background:var(--card); border:1px solid var(--border); padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">🅿 PAYPAL</span>
+          <span style="background:var(--card); border:1px solid var(--border); padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">🏦 BANCO</span>
+          <span style="background:var(--card); border:1px solid var(--border); padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-muted);">₿ CRYPTO</span>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--border); padding:12px; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.5rem;"></span>
+          <div>
+            <div style="font-family:'Orbitron',sans-serif; font-size:0.78rem; color:var(--white);">Compra Segura</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); font-family:'Share Tech Mono',monospace;">SSL/TLS Encrypted • PCI DSS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <div class="footer-bottom">© 2025 NEXUS Tech Store. Todos los derechos reservados. Honduras, C.A.</div>
+      <div class="footer-bottom">Hecho con para gamers y profesionales</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- App JS -->
+<script src="app.js"></script>
+
+</body>
+</html>
