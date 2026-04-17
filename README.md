@@ -17,7 +17,7 @@
 
 > **URL Pública:** [https://proyecto-economia-equipo3.netlify.app/](https://proyecto-economia-equipo3.netlify.app/)
 >
-> *(Reemplaza este enlace con tu URL real de Netlify)*
+
 
 ---
 
